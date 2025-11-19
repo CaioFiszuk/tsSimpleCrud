@@ -46,7 +46,7 @@ function updateDado(req, res, next) {
     const { dadoId } = req.params;
     const { title, content } = req.body;
 
-    const stmt = db.prepare('UPDATE produtos SET title = ?, content = ? WHERE id = ?');
+    const stmt = db.prepare('UPDATE dados SET title = ?, content = ? WHERE id = ?');
     const result = stmt.run(title, content, dadoId);
 
     if (result.changes === 0) {
