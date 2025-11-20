@@ -1,21 +1,46 @@
 import { useState, useEffect } from 'react';
 import { api, type Dado } from '../utils/api';
+import  Popup  from '../components/Popup';
+import Form from '../components/Form';
 
 function App() {
   const [dados, setDados] = useState<Dado[]>([]);
+  const [createModal, setCreateModal] = useState(false);
+
+  const openCreateModal = () => {
+    setCreateModal(true);
+  }
+
+  const closeCreateModal = () => {
+    setCreateModal(false);
+  }
 
   const getDados = async () => {
-    const response = await api.getDados();
+    try{
+      const response = await api.getDados();
+      setDados(response);
+    }catch(error){
+      console.error(error);
+    }
+  }
 
-    setDados(response);
+  const handleCreateDados = async (data: { title: string; content: string }) => {
+      try {
+      const newDado = await api.createDado(data);
+      setDados(prev => [...prev, newDado]);
+      closeCreateModal();
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   useEffect(()=>{
    getDados();
-  }, []);
+  }, [dados]);
 
   return (
     <>
+    <button onClick={openCreateModal}>Criar</button>
      {
       dados && dados.length > 0 ? (
         <div>
@@ -32,6 +57,10 @@ function App() {
         <p>Não há dados</p>
       )
      }
+
+     <Popup isOpen={createModal} onClose={closeCreateModal}>
+      <Form handleSubmitForm={handleCreateDados} formName='Criar' buttonName='Criar'/>
+     </Popup>
     </>
   )
 }
