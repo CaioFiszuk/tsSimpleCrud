@@ -40,19 +40,19 @@ function App() {
 
   return (
     <>
-    <button onClick={openCreateModal}>Criar</button>
+    <button onClick={openCreateModal} className='create-button'>Criar</button>
      {
       dados && dados.length > 0 ? (
-        <div>
+        <section className='main-box'>
           {
           dados.map((dado)=>(
-            <div key={dado.id}>
+            <div key={dado.id} className='main-box__element'>
               <h2>{dado.title}</h2>
               <p>{dado.content}</p>
             </div>
           ))
           }
-        </div>
+        </section>
       ) : (
         <p>Não há dados</p>
       )

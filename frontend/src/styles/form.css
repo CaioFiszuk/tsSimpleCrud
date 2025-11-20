@@ -1,0 +1,32 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.form__title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 25px;
+}
+
+.form__input {
+    width: 400px;
+    height: 30px;
+    align-self: center;
+}
+
+.form__button {
+    border: none;
+    border-radius: 20px;
+    background-color: royalblue;
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    width: 200px;
+    align-self: center;
+}
+
+.form__button:hover {
+    opacity: 0.50;
+}
