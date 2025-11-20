@@ -1,9 +1,15 @@
 import Modal from 'react-modal';
-//import '../styles/popup.css';
+import { ReactNode } from 'react';
+
+type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+};
 
 Modal.setAppElement('#root');
 
-function Popup({ isOpen, onClose, children }) {
+function Popup({ isOpen, onClose, children }: ModalProps) {
   return (
     <Modal
       isOpen={isOpen}
