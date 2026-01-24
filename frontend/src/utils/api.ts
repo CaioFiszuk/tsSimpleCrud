@@ -6,7 +6,12 @@ interface ApiOptions {
 }
 
 export interface Dado {
-  id?: number;
+  id: number;
+  title: string;
+  content: string;
+}
+
+export interface CreateDadoDTO {
   title: string;
   content: string;
 }
@@ -33,7 +38,7 @@ class Api {
     return `Network error: ${error.message}`;
   }
 
-async createDado(data: Dado): Promise<Dado> {
+async createDado(data: CreateDadoDTO): Promise<Dado> {
   const { title, content } = data;
 
   if (!title || !content) {

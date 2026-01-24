@@ -26,10 +26,10 @@ function getDados(req, res, next) {
 
 function deleteDado(req, res, next) {
    try {
-    const { dadoId } = req.params;
+    const { dadosId } = req.params;
 
     const stmt = db.prepare('DELETE FROM dados WHERE id = ?');
-    const result = stmt.run(dadoId);
+    const result = stmt.run(dadosId);
 
     if (result.changes === 0) {
       return res.status(404).json({ message: 'Dado não encontrado' });

@@ -34,9 +34,18 @@ function App() {
     }
   }
 
+  const deleteDado = async (id: number) => {
+    try {
+      await api.deleteDado(id);
+      setDados(prev => prev.filter(dado => dado.id !== id));
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
   useEffect(()=>{
    getDados();
-  }, [dados]);
+  }, []);
 
   return (
     <>
@@ -49,6 +58,12 @@ function App() {
             <div key={dado.id} className='main-box__element'>
               <h2>{dado.title}</h2>
               <p>{dado.content}</p>
+              <button
+                onClick={()=>deleteDado(dado.id)}
+                className='delete-button'
+              >
+                Deletar
+              </button>
             </div>
           ))
           }
