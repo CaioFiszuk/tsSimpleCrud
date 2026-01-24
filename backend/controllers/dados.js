@@ -43,17 +43,17 @@ function deleteDado(req, res, next) {
 
 function updateDado(req, res, next) {
     try {
-    const { dadoId } = req.params;
+    const { dadosId } = req.params;
     const { title, content } = req.body;
 
     const stmt = db.prepare('UPDATE dados SET title = ?, content = ? WHERE id = ?');
-    const result = stmt.run(title, content, dadoId);
+    const result = stmt.run(title, content, dadosId);
 
     if (result.changes === 0) {
       return res.status(404).json({ message: 'Dado não encontrado' });
     }
 
-    const updatedDado = db.prepare('SELECT * FROM dados WHERE id = ?').get(dadoId);
+    const updatedDado = db.prepare('SELECT * FROM dados WHERE id = ?').get(dadosId);
 
     res.status(200).json(updatedDado);
   } catch (err) {

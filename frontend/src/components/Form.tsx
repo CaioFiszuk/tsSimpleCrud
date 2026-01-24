@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+type FormData = {
+  title: string;
+  content: string;
+};
 
 type FormProps = {
   handleSubmitForm: (data: { title: string; content: string }) => Promise<void> | void;
   formName: string;
   buttonName: string;
+  initialData?: FormData | null;
 };
 
-function Form({handleSubmitForm, formName, buttonName}: FormProps) {
+function Form({handleSubmitForm, formName, buttonName, initialData}: FormProps) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
 
@@ -16,6 +22,13 @@ function Form({handleSubmitForm, formName, buttonName}: FormProps) {
     await handleSubmitForm({title, content});
     
   };
+
+    useEffect(() => {
+      if (initialData) {
+        setTitle(initialData.title || "");
+        setContent(initialData.content || "");
+      }
+    }, [initialData]);
 
   return (
     <form className="form" onSubmit={handleSubmit}>

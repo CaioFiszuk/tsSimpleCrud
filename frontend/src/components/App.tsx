@@ -5,14 +5,25 @@ import Form from '../components/Form';
 
 function App() {
   const [dados, setDados] = useState<Dado[]>([]);
-  const [createModal, setCreateModal] = useState(false);
+  const [createModal, setCreateModal] = useState<boolean>(false);
+  const [updateModal, setUpdateModal] = useState<boolean>(false);
+  const [selectedDado, setSelecetedDado] = useState<Dado | null>(null);
 
   const openCreateModal = () => {
     setCreateModal(true);
   }
 
+  const openUpdateModal = (dado: any) => {
+    setSelecetedDado(dado)
+    setUpdateModal(true);
+  }
+
   const closeCreateModal = () => {
     setCreateModal(false);
+  }
+
+  const closeUpdateModal = () => {
+    setUpdateModal(false);
   }
 
   const getDados = async () => {
@@ -27,17 +38,38 @@ function App() {
   const handleCreateDados = async (data: { title: string; content: string }) => {
       try {
       const newDado = await api.createDado(data);
-      setDados(prev => [...prev, newDado]);
+      const dadoWithData = {
+        id: newDado.id,
+        ...data
+      };
+      setDados(prev => [...prev, dadoWithData]);
       closeCreateModal();
     } catch(error) {
       console.error(error);
     }
   }
 
-  const deleteDado = async (id: number) => {
+  const handleDeleteDado = async (id: number) => {
     try {
       await api.deleteDado(id);
       setDados(prev => prev.filter(dado => dado.id !== id));
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  const handleUpdateDado = async (data: { title: string; content: string }) => {
+    if (!selectedDado) return;
+
+    try {
+     const response = await api.updateDado(selectedDado.id, data);
+
+     setDados((prev)=>{
+      return prev.map(dado => dado.id === selectedDado.id ? response : dado);
+     });
+
+     closeUpdateModal();
+      
     } catch(error) {
       console.error(error);
     }
@@ -59,10 +91,16 @@ function App() {
               <h2>{dado.title}</h2>
               <p>{dado.content}</p>
               <button
-                onClick={()=>deleteDado(dado.id)}
-                className='delete-button'
+                onClick={()=>handleDeleteDado(dado.id)}
+                className='button delete'
               >
                 Deletar
+              </button>
+              <button
+                onClick={()=>openUpdateModal(dado)}
+                className='button update'
+              >
+                Editar
               </button>
             </div>
           ))
@@ -74,7 +112,20 @@ function App() {
      }
 
      <Popup isOpen={createModal} onClose={closeCreateModal}>
-      <Form handleSubmitForm={handleCreateDados} formName='Criar' buttonName='Criar'/>
+      <Form 
+        handleSubmitForm={handleCreateDados} 
+        formName='Criar' 
+        buttonName='Criar'
+      />
+     </Popup>
+
+     <Popup isOpen={updateModal} onClose={closeUpdateModal}>
+      <Form
+        handleSubmitForm={handleUpdateDado}
+        formName="Editar"
+        buttonName="Editar"
+        initialData={selectedDado}
+      />
      </Popup>
     </>
   )

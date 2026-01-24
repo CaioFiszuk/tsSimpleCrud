@@ -24,15 +24,23 @@
     padding-bottom: 50px;
 }
 
-.delete-button {
+.button {
     border: none;
     border-radius: 20px;
     padding: 10px;
-    background-color: red;
+    width: 150px;
     color: white;
     cursor: pointer;
 }
 
-.delete-button:hover {
+.button:hover {
     opacity: 0.85;
+}
+
+.delete {
+    background-color: red;
+}
+
+.update {
+    background-color: green;
 }
